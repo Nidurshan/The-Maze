@@ -1,8 +1,8 @@
-
   <style>
     body {
       margin: 0;
-      background: white;
+      background: whitesmoke;
+      color: #e28101;
     }
   </style>
 
@@ -29,6 +29,9 @@
       1000
     )
 
+    camera.position.set(0, 35, 15)
+    camera.rotation.set(-Math.PI / 2, 0, 0)
+
     const renderer = new THREE.WebGLRenderer()
     renderer.shadowMap.enabled = true
     renderer.setSize(window.innerWidth, window.innerHeight)
@@ -37,17 +40,17 @@
     const controls = new OrbitControls(camera, renderer.domElement)
 
     const player = new THREE.Mesh(
-      new THREE.SphereGeometry(0.3, 32, 32),
+      new THREE.SphereGeometry(0.5, 32, 32),
       new THREE.MeshStandardMaterial({ color: 0xff0000 })
     )
     player.castShadow = true
-    player.position.y = -1.45
-    player.position.z = 39
+    player.position.y = -1
+    player.position.z = 23
     scene.add(player)
 
     const ground = new THREE.Mesh(
       new THREE.BoxGeometry(10, 1, 50),
-      new THREE.MeshStandardMaterial({ color: 0x006400 })
+      new THREE.MeshStandardMaterial({ color: 0xD3D3D3 })
     )
     ground.receiveShadow = true
     ground.position.y = -2
@@ -60,39 +63,45 @@
     scene.add(light)
 
     const walls = [
-      {width: 4, height: 1, depth: 1, color: '#195d6e', positionX: 3, positionY: -1.2, positionZ: 6}, // blue
-      { width: 4, height: 1, depth: 1, color: '#6e3119', positionX: -3, positionY: -1.2, positionZ: 6}, // brown
-      {width: 2, height: 1, depth: 1, color: '#ffffff', positionX: 4, positionY: -1.2, positionZ: 3}, // White
-      {width: 2, height: 1, depth: 1, color: '#dc143c', positionX: -4, positionY: -1.2, positionZ: 3}, // light red
-      { width: 2, height: 1, depth: 1, color: '#e6ff09', positionX: 0, positionY: -1.2, positionZ: 3}, // yellow
-      {width: 8, height: 1, depth: 1, color: '#ff1493', positionX: -1, positionY: -1.2, positionZ: 0}, // pink
-      ]
+      {width: 4, height: 1, depth: 1, positionX: 3, positionY: -1.2, positionZ: 6},
+      { width: 4, height: 1, depth: 1, positionX: -3, positionY: -1.2, positionZ: 6},
+      {width: 2, height: 1, depth: 1, positionX: 4, positionY: -1.2, positionZ: 3},
+      {width: 2, height: 1, depth: 1, positionX: -4, positionY: -1.2, positionZ: 3},
+      { width: 2, height: 1, depth: 1, positionX: 0, positionY: -1.2, positionZ: 3},
+      {width: 8, height: 1, depth: 1, positionX: -1, positionY: -1.2, positionZ: 0}]
 
     for (let i = 0; i < walls.length; i++) {
       var wallObj = walls[i];
       const wall = new THREE.Mesh(
         new THREE.BoxGeometry(wallObj.width, wallObj.height, wallObj.depth),
-        new THREE.MeshStandardMaterial({ color: wallObj.color })
+        new THREE.MeshStandardMaterial({ color: 0xe28101 })
       )
       wall.position.x = wallObj.positionX
       wall.position.y = wallObj.positionY
       wall.position.z = wallObj.positionZ
       wall.castShadow = true
       scene.add(wall);
-
-
     }
 
-    camera.position.z = 30
-    camera.position.x = 0
-    camera.position.y = 15
+    const keyState = {}
+
+    window.addEventListener('keydown', (event) => {
+      keyState[event.code] = true
+    })
+    window.addEventListener('keyup', (event) => {
+      keyState[event.code] = false
+    })
 
     function animate() {
       requestAnimationFrame(animate)
       renderer.render(scene, camera)
+      if (keyState['ArrowUp']) player.position.z -= 0.1
+      if (keyState['ArrowDown']) player.position.z += 0.1
+      if (keyState['ArrowLeft']) player.position.x -= 0.1
+      if (keyState['ArrowRight']) player.position.x += 0.1
       //   player.position.y += 0.01
-      //   cube.rotation.x += 0.01
-      //   cube.rotation.y += 0.01
+        // player.rotation.x += 0.01
+        // player.rotation.y += 0.01
     }
     animate()
   </script>

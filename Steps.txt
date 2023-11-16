@@ -3,13 +3,13 @@ The Maze
 Steps
 =====
 
-1. Create the environment
+1. Create the environment (10am - 5pm)
 	- Ground
 	- Walls
 	- Ball
 	- Home
 
-2. Add Camera and lighting
+2. Add Camera and lighting (9am - 10am)
 
 3. Implement game logic and rules
 	- Ball's movement(up, down, left, right)
