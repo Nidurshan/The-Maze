@@ -1,0 +1,18 @@
+The Maze
+
+Steps
+=====
+
+1. Create the environment
+	- Ground
+	- Walls
+	- Ball
+	- Home
+
+2. Add Camera and lighting
+
+3. Implement game logic and rules
+	- Ball's movement(up, down, left, right)
+	- Game restarts when collid with a wall
+	- The player wins when the ball reaches home
+	
