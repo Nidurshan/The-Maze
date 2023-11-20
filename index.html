@@ -1,7 +1,6 @@
 <style>
   body {
     margin: 0;
-    background: whitesmoke;
   }
 </style>
 
@@ -20,7 +19,9 @@
   import * as THREE from 'three'
   import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
+  const raycaster = new THREE.Raycaster()
   const scene = new THREE.Scene()
+  scene.background = new THREE.Color(0x808080)
   const camera = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
@@ -67,25 +68,28 @@
   // dLight.castShadow = true
   scene.add(dLight)
 
+  const aLight = new THREE.AmbientLight(0x404040, 0.5)
+  scene.add(aLight)
+
   const walls = [
-    { width: 4, height: 1, depth: 1, positionX: 3, positionY: -1.2, positionZ: 15 },
-    { width: 4, height: 1, depth: 1, positionX: -3, positionY: -1.2, positionZ: 15 },
-    { width: 2, height: 1, depth: 1, positionX: 4, positionY: -1.2, positionZ: 12 },
-    { width: 2, height: 1, depth: 1, positionX: -4, positionY: -1.2, positionZ: 12 },
-    { width: 2, height: 1, depth: 1, positionX: 0, positionY: -1.2, positionZ: 12 },
-    { width: 8, height: 1, depth: 1, positionX: -1, positionY: -1.2, positionZ: 9 },
-    { width: 6, height: 1, depth: 1, positionX: 2, positionY: -1.2, positionZ: 6 },
-    { width: 2, height: 1, depth: 1, positionX: -4, positionY: -1.2, positionZ: 6 },
-    { width: 8, height: 1, depth: 1, positionX: 1, positionY: -1.2, positionZ: 3 },
-    { width: 2, height: 1, depth: 1, positionX: 4, positionY: -1.2, positionZ: 0 },
-    { width: 2, height: 1, depth: 1, positionX: -4, positionY: -1.2, positionZ: 0 },
-    { width: 2, height: 1, depth: 1, positionX: 0, positionY: -1.2, positionZ: 0 },
-    { width: 4, height: 1, depth: 1, positionX: 3, positionY: -1.2, positionZ: -3 },
-    { width: 4, height: 1, depth: 1, positionX: -3, positionY: -1.2, positionZ: -3 },
-    { width: 6, height: 1, depth: 1, positionX: -2, positionY: -1.2, positionZ: -6 },
-    { width: 2, height: 1, depth: 1, positionX: 4, positionY: -1.2, positionZ: -6 },
-    { width: 4, height: 1, depth: 1, positionX: 3, positionY: -1.2, positionZ: -9 },
-    { width: 4, height: 1, depth: 1, positionX: -3, positionY: -1.2, positionZ: -9 }]
+    { width: 4, height: 1.5, depth: 1, positionX: 3, positionY: -1.2, positionZ: 15 },
+    { width: 4, height: 1.5, depth: 1, positionX: -3, positionY: -1.2, positionZ: 15 },
+    { width: 2, height: 1.5, depth: 1, positionX: 4, positionY: -1.2, positionZ: 12 },
+    { width: 2, height: 1.5, depth: 1, positionX: -4, positionY: -1.2, positionZ: 12 },
+    { width: 2, height: 1.5, depth: 1, positionX: 0, positionY: -1.2, positionZ: 12 },
+    { width: 8, height: 1.5, depth: 1, positionX: -1, positionY: -1.2, positionZ: 9 },
+    { width: 6, height: 1.5, depth: 1, positionX: 2, positionY: -1.2, positionZ: 6 },
+    { width: 2, height: 1.5, depth: 1, positionX: -4, positionY: -1.2, positionZ: 6 },
+    { width: 8, height: 1.5, depth: 1, positionX: 1, positionY: -1.2, positionZ: 3 },
+    { width: 2, height: 1.5, depth: 1, positionX: 4, positionY: -1.2, positionZ: 0 },
+    { width: 2, height: 1.5, depth: 1, positionX: -4, positionY: -1.2, positionZ: 0 },
+    { width: 2, height: 1.5, depth: 1, positionX: 0, positionY: -1.2, positionZ: 0 },
+    { width: 4, height: 1.5, depth: 1, positionX: 3, positionY: -1.2, positionZ: -3 },
+    { width: 4, height: 1.5, depth: 1, positionX: -3, positionY: -1.2, positionZ: -3 },
+    { width: 6, height: 1.5, depth: 1, positionX: -2, positionY: -1.2, positionZ: -6 },
+    { width: 2, height: 1.5, depth: 1, positionX: 4, positionY: -1.2, positionZ: -6 },
+    { width: 4, height: 1.5, depth: 1, positionX: 3, positionY: -1.2, positionZ: -9 },
+    { width: 4, height: 1.5, depth: 1, positionX: -3, positionY: -1.2, positionZ: -9 }]
 
   for (let i = 0; i < walls.length; i++) {
     var wallObj = walls[i];
@@ -102,54 +106,32 @@
 
   const homeBox = new THREE.Mesh(
     new THREE.BoxGeometry(4, 4, 4),
-    new THREE.MeshStandardMaterial({ color: 0x00ff00 })
+    new THREE.MeshStandardMaterial({ color: 0x0000ff })
   )
-  // homeBox.position.z = -18
-  // scene.add(homeBox)
 
-  const coneGeometry = new THREE.ConeGeometry(2, 2, 4)
-  const coneMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 })
+  const coneGeometry = new THREE.ConeGeometry(2.9, 2.8, 4)
+  const coneMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 })
   const homeCone = new THREE.Mesh(coneGeometry, coneMaterial)
-  homeCone.position.y = 2.5
+  homeCone.position.y = 3.4
+  homeCone.rotation.y = 0.8
 
   const house = new THREE.Group()
   house.add(homeBox)
   house.add(homeCone)
+  house.position.z = -18
   scene.add(house)
-  // homeCone.rotation.y = 0.1
-  // scene.add(homeCone)
 
-  // const triangleGeometry = new THREE.Geometry();
-  // triangleGeometry.vertices.push(new THREE.Vector3(0, 1, 0))
-  // triangleGeometry.vertices.push(new THREE.Vector3(-1, -1, 0))
-  // triangleGeometry.vertices.push(new THREE.Vector3(1, -1, 0))
-  // triangleGeometry.faces.push(new THREE.Face3(0, 1, 2))
+  // function checkCollisions() {
+  //   raycaster.setFromCamera({ x: 0, y: 0 }, camera)
 
-  // const triangleMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00, side: THREE.DoubleSide })
-  // const hometriangle = new THREE.Mesh(triangleGeometry, triangleMaterial)
-  // scene.add(hometriangle)
-
-  class Box extends THREE.Mesh {
-    updateSides() {
-      this.right = this.position.x + this.width / 2
-      this.left = this.position.x - this.width / 2
+  // const animationId = requestAnimationFrame(animate)
   
-      this.bottom = this.position.y - this.height / 2
-      this.top = this.position.y + this.height / 2
-  
-      this.front = this.position.z + this.depth / 2
-      this.back = this.position.z - this.depth / 2
-    }
-  }
-
-
-  function boxCollision({ player, wallObj }) {
-    const xCollision = player.right >= wallObj.left && player.left <= wallObj.right
-    const yCollision = player.bottom <= wallObj.top && player.top >= wallObj.bottom
-    const zCollision = player.front >= wallObj.back && player.back <= wallObj.front
-
-    return xCollision && yCollision && zCollision
-  }
+  //   const intersects = raycaster.intersectObjects([player, walls])
+  //   if(intersects.lenght > 0) {
+  //     console.log("Collision detected!")
+  //     cancelAnimationFrame(animationId)
+  //   }
+  // }
 
   const keyState = {}
 
@@ -162,16 +144,13 @@
 
   function animate() {
     requestAnimationFrame(animate)
+    // checkCollisions()
     renderer.render(scene, camera)
     if (keyState['ArrowUp']) player.position.z -= 0.1
     if (keyState['ArrowDown']) player.position.z += 0.1
     if (keyState['ArrowLeft']) player.position.x -= 0.1
     if (keyState['ArrowRight']) player.position.x += 0.1
     if (keyState['Space']) player.position.y += 0.5
-    // player.position.y += 0.01
-    // ground.rotation.y += 0.01
-    // player.rotation.y += 0.01
-    // player.rotation.y += 0.01
   }
   animate()
 </script>

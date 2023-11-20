@@ -15,4 +15,30 @@ Steps
 	- Ball's movement(up, down, left, right)
 	- Game restarts when collid with a wall
 	- The player wins when the ball reaches home
+
+
+=================================================================
+
+	
+  class Box extends THREE.Mesh {
+  updateSides() {
+  this.right = this.position.x + this.width / 2
+  this.left = this.position.x - this.width / 2
+  
+  this.bottom = this.position.y - this.height / 2
+  this.top = this.position.y + this.height / 2
+  
+  this.front = this.position.z + this.depth / 2
+  this.back = this.position.z - this.depth / 2
+  }
+  }
+
+
+  function boxCollision({ player, wallObj }) {
+  const xCollision = player.right >= wallObj.left && player.left <= wallObj.right
+  const yCollision = player.bottom <= wallObj.top && player.top >= wallObj.bottom
+  const zCollision = player.front >= wallObj.back && player.back <= wallObj.front
+
+  return xCollision && yCollision && zCollision
+  }
 	
