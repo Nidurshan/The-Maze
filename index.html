@@ -13,7 +13,7 @@
             "three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/"
           }
         }
-      </script>
+</script>
 
 <script type="module">
   import * as THREE from 'three'
@@ -45,7 +45,8 @@
   )
   // player.castShadow = true
   player.position.y = -1
-  player.position.z = 23
+  player.position.z = 22
+  // player.material.color.set(0x0000ff);
   scene.add(player)
 
   const ground = new THREE.Mesh(
@@ -71,7 +72,11 @@
   const aLight = new THREE.AmbientLight(0x404040, 0.5)
   scene.add(aLight)
 
-  const walls = [
+  const walls = [];
+
+  const wallsData = [
+    { width: 6, height: 1.5, depth: 1, positionX: -2, positionY: -1.2, positionZ: 18 },
+    { width: 2, height: 1.5, depth: 1, positionX: 4, positionY: -1.2, positionZ: 18 },
     { width: 4, height: 1.5, depth: 1, positionX: 3, positionY: -1.2, positionZ: 15 },
     { width: 4, height: 1.5, depth: 1, positionX: -3, positionY: -1.2, positionZ: 15 },
     { width: 2, height: 1.5, depth: 1, positionX: 4, positionY: -1.2, positionZ: 12 },
@@ -89,10 +94,13 @@
     { width: 6, height: 1.5, depth: 1, positionX: -2, positionY: -1.2, positionZ: -6 },
     { width: 2, height: 1.5, depth: 1, positionX: 4, positionY: -1.2, positionZ: -6 },
     { width: 4, height: 1.5, depth: 1, positionX: 3, positionY: -1.2, positionZ: -9 },
-    { width: 4, height: 1.5, depth: 1, positionX: -3, positionY: -1.2, positionZ: -9 }]
+    { width: 4, height: 1.5, depth: 1, positionX: -3, positionY: -1.2, positionZ: -9 },
+    { width: 1, height: 3, depth: 50, positionX: 5.5, positionY: -1, positionZ: 0 },
+    { width: 1, height: 3, depth: 50, positionX: -5, positionY: -1, positionZ: 0 }
+  ]
 
-  for (let i = 0; i < walls.length; i++) {
-    var wallObj = walls[i];
+  for (let i = 0; i < wallsData.length; i++) {
+    var wallObj = wallsData[i];
     const wall = new THREE.Mesh(
       new THREE.BoxGeometry(wallObj.width, wallObj.height, wallObj.depth),
       new THREE.MeshStandardMaterial({ color: 0xD2691E })
@@ -101,8 +109,11 @@
     wall.position.y = wallObj.positionY
     wall.position.z = wallObj.positionZ
     // wall.castShadow = true
-    scene.add(wall)
+    walls.push(wall);
   }
+
+  // Add walls to the scene by looping
+  walls.map(wall => scene.add(wall));
 
   const homeBox = new THREE.Mesh(
     new THREE.BoxGeometry(4, 4, 4),
@@ -121,18 +132,6 @@
   house.position.z = -18
   scene.add(house)
 
-  // function checkCollisions() {
-  //   raycaster.setFromCamera({ x: 0, y: 0 }, camera)
-
-  // const animationId = requestAnimationFrame(animate)
-  
-  //   const intersects = raycaster.intersectObjects([player, walls])
-  //   if(intersects.lenght > 0) {
-  //     console.log("Collision detected!")
-  //     cancelAnimationFrame(animationId)
-  //   }
-  // }
-
   const keyState = {}
 
   window.addEventListener('keydown', (event) => {
@@ -142,15 +141,38 @@
     keyState[event.code] = false
   })
 
-  function animate() {
-    requestAnimationFrame(animate)
-    // checkCollisions()
-    renderer.render(scene, camera)
+
+  // Set initial positions for resetting mesh1
+  const initialPositionPlayer = new THREE.Vector3(player.position.x, player.position.y, player.position.z);
+
+  function checkCollision() {
+    // Check for collision between mesh1 and mesh2
+    walls.map(wall => {
+      const distance = player.position.distanceTo(wall.position);
+
+      if (distance < 1) {
+        // Collision detected, reset mesh1 to initial position
+        player.position.copy(initialPositionPlayer);
+      }
+    })
+  }
+
+  // Update function to handle movement and collision
+  function update() {
+
     if (keyState['ArrowUp']) player.position.z -= 0.1
     if (keyState['ArrowDown']) player.position.z += 0.1
     if (keyState['ArrowLeft']) player.position.x -= 0.1
     if (keyState['ArrowRight']) player.position.x += 0.1
     if (keyState['Space']) player.position.y += 0.5
+
+    checkCollision();
+  }
+
+  function animate() {
+    update();
+    renderer.render(scene, camera)
+    requestAnimationFrame(animate)
   }
   animate()
 </script>
