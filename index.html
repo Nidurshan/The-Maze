@@ -97,18 +97,6 @@
 
     const controls = new OrbitControls(camera, renderer.domElement)
 
-    // Add text to scene
-    // const titleGeometry = new THREE.TextGeometry('The Maze', {
-    //   font: new THREE.Font(),
-    //   size: 0.5,
-    //   height: 0.1,
-    //   curveSegments: 12,
-    //   bevelEnabled: false,
-    // })
-    // const titleMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 })
-    // const title = new THREE.Mesh(titleGeometry, titleMaterial)
-    // scene.add(title)
-
     const player = new THREE.Mesh(
       new THREE.SphereGeometry(0.5, 32, 32),
       new THREE.MeshStandardMaterial({ color: 0xff0000 })
@@ -213,11 +201,11 @@
       keyState[event.code] = false
     })
 
-    icon1.visibile = true
-    icon2.visibile = true
-    icon3.visibile = true
-    icon4.visibile = true
-    icon5.visibile = true
+    // icon1.visibile = true
+    // icon2.visibile = true
+    // icon3.visibile = true
+    // icon4.visibile = true
+    // icon5.visibile = true
 
 
     // Set initial positions for resetting mesh1
