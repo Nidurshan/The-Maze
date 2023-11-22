@@ -13,17 +13,24 @@
     THE MAZE
   </div>
 
-  <div class="icons">
-    <img id="icon1" src="./icons8-heart-64-removebg-preview.png" alt="image">
+  <div class="lives">
+    <img id="life1" class="life-icon" src="./Images and Icons/icons8-heart-64-removebg-preview.png" alt="image">
     <br>
-    <img id="icon2" src="./icons8-heart-64-removebg-preview.png" alt="image">
+    <img id="life2" class="life-icon" src="./Images and Icons/icons8-heart-64-removebg-preview.png" alt="image">
     <br>
-    <img id="icon3" src="./icons8-heart-64-removebg-preview.png" alt="image">
+    <img id="life3" class="life-icon" src="./Images and Icons/icons8-heart-64-removebg-preview.png" alt="image">
     <br>
-    <img id="icon4" src="./icons8-heart-64-removebg-preview.png" alt="image">
+    <img id="life4" class="life-icon" src="./Images and Icons/icons8-heart-64-removebg-preview.png" alt="image">
     <br>
-    <img id="icon5" src="./icons8-heart-64-removebg-preview.png" alt="image">
+    <img id="life5" class="life-icon" src="./Images and Icons/icons8-heart-64-removebg-preview.png" alt="image">
   </div>
+
+  <div class="game-over" id="gameOver">
+    GAME OVER!
+    <img src="./Images and Icons/icons8-sad-face-96.png" alt="icon">
+  </div>
+
+  <button class="button" id="retry-btn">RESTART</button>
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Oswald&family=Raleway:wght@500&family=Roboto+Mono:ital,wght@0,700;1,400&family=Roboto:ital,wght@0,500;1,900&family=Tektur:wght@600&family=Vina+Sans&display=swap');
@@ -35,24 +42,62 @@
     .mainTitle {
       position: absolute;
       z-index: 100;
-      font-family: 'Vina Sans', sans-serif;
-      font-size: 5rem;
+      font-family: 'Arial', sans-serif;
+      font-size: 4rem;
       display: flex;
       padding: 20px;
       padding-left: 40px;
       letter-spacing: 0.05em;
-      /* background: linear-gradient(to right, #00aeff, #40ff00); */
-      background: purple;
+      background: rgb(255, 255, 255);
       -webkit-background-clip: text;
       color: transparent;
       font-weight: bolder;
     }
 
-    .icons {
+    .lives {
       position: absolute;
       z-index: 20;
       padding: 40px;
       padding-top: 200px;
+    }
+
+    .game-over {
+      position: absolute;
+      z-index: 50;
+      font-family: 'League Spartan', sans-serif;
+      font-size: 8rem;
+      border: 5px solid black;
+      background: whitesmoke;
+      border-radius: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 40px 100px 40px;
+      margin-left: 350px;
+      margin-top: 250px;
+      font-weight: bolder;
+    }
+
+    .button {
+      position: absolute;
+      z-index: 150;
+      font-family: 'League Spartan', sans-serif;
+      font-size: 15px;
+      background: rgb(0, 213, 255);
+      font-weight: bolder;
+      color: rgb(0, 0, 0);
+      border-radius: 20px;
+      cursor: pointer;
+      margin-left: 760px;
+      margin-top: 550px;
+      padding: 10px 15px 10px 15px;
+      border: none;
+    }
+
+    .button:hover {
+      color: white;
+      background: black;
     }
   </style>
 
@@ -71,11 +116,11 @@
     import * as THREE from 'three'
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
-    var icon1 = document.getElementById('icon1')
-    var icon2 = document.getElementById('icon2')
-    var icon3 = document.getElementById('icon3')
-    var icon4 = document.getElementById('icon4')
-    var icon5 = document.getElementById('icon5')
+    var life1 = document.getElementById('life1')
+    var life2 = document.getElementById('life2')
+    var life3 = document.getElementById('life3')
+    var life4 = document.getElementById('life4')
+    var life5 = document.getElementById('life5')
 
     const raycaster = new THREE.Raycaster()
     const scene = new THREE.Scene()
@@ -133,30 +178,86 @@
     const walls = [];
 
     const wallsData = [
-      { width: 6, height: 1.5, depth: 1, positionX: -2, positionY: -1.2, positionZ: 18 },
-      { width: 2, height: 1.5, depth: 1, positionX: 4, positionY: -1.2, positionZ: 18 },
-      { width: 4, height: 1.5, depth: 1, positionX: 3, positionY: -1.2, positionZ: 15 },
-      { width: 4, height: 1.5, depth: 1, positionX: -3, positionY: -1.2, positionZ: 15 },
-      { width: 2, height: 1.5, depth: 1, positionX: 4, positionY: -1.2, positionZ: 12 },
-      { width: 2, height: 1.5, depth: 1, positionX: -4, positionY: -1.2, positionZ: 12 },
-      { width: 2, height: 1.5, depth: 1, positionX: 0, positionY: -1.2, positionZ: 12 },
-      { width: 8, height: 1.5, depth: 1, positionX: -1, positionY: -1.2, positionZ: 9 },
-      { width: 6, height: 1.5, depth: 1, positionX: 2, positionY: -1.2, positionZ: 6 },
-      { width: 2, height: 1.5, depth: 1, positionX: -4, positionY: -1.2, positionZ: 6 },
-      { width: 8, height: 1.5, depth: 1, positionX: 1, positionY: -1.2, positionZ: 3 },
-      { width: 2, height: 1.5, depth: 1, positionX: 4, positionY: -1.2, positionZ: 0 },
-      { width: 2, height: 1.5, depth: 1, positionX: -4, positionY: -1.2, positionZ: 0 },
-      { width: 2, height: 1.5, depth: 1, positionX: 0, positionY: -1.2, positionZ: 0 },
-      { width: 4, height: 1.5, depth: 1, positionX: 3, positionY: -1.2, positionZ: -3 },
-      { width: 4, height: 1.5, depth: 1, positionX: -3, positionY: -1.2, positionZ: -3 },
-      { width: 6, height: 1.5, depth: 1, positionX: -2, positionY: -1.2, positionZ: -6 },
-      { width: 2, height: 1.5, depth: 1, positionX: 4, positionY: -1.2, positionZ: -6 },
-      { width: 4, height: 1.5, depth: 1, positionX: 3, positionY: -1.2, positionZ: -9 },
-      { width: 4, height: 1.5, depth: 1, positionX: -3, positionY: -1.2, positionZ: -9 },
-      { width: 1, height: 3, depth: 50, positionX: 5.5, positionY: -1, positionZ: 0 },
-      { width: 1, height: 3, depth: 50, positionX: -5, positionY: -1, positionZ: 0 },
-      { width: 11.5, height: 3, depth: 1, positionX: 0.25, positionY: -1, positionZ: -25 },
-      { width: 11.5, height: 3, depth: 1, positionX: 0.25, positionY: -1, positionZ: 25 }
+      { width: 2, height: 2, depth: 1, positionX: -4, positionY: -1.2, positionZ: 18 },
+      { width: 2, height: 2, depth: 1, positionX: -2, positionY: -1.2, positionZ: 18 },
+      { width: 2, height: 2, depth: 1, positionX: 0, positionY: -1.2, positionZ: 18 },
+      { width: 2, height: 2, depth: 1, positionX: 4, positionY: -1.2, positionZ: 18 },
+
+      { width: 2, height: 2, depth: 1, positionX: -4, positionY: -1.2, positionZ: 15 },
+      { width: 2, height: 2, depth: 1, positionX: -2, positionY: -1.2, positionZ: 15 },
+      { width: 2, height: 2, depth: 1, positionX: 2, positionY: -1.2, positionZ: 15 },
+      { width: 2, height: 2, depth: 1, positionX: 4, positionY: -1.2, positionZ: 15 },
+
+      { width: 2, height: 2, depth: 1, positionX: -4, positionY: -1.2, positionZ: 12 },
+      { width: 2, height: 2, depth: 1, positionX: 0, positionY: -1.2, positionZ: 12 },
+      { width: 2, height: 2, depth: 1, positionX: 4, positionY: -1.2, positionZ: 12 },
+
+      { width: 2, height: 2, depth: 1, positionX: -4, positionY: -1.2, positionZ: 9 },
+      { width: 2, height: 2, depth: 1, positionX: -2, positionY: -1.2, positionZ: 9 },
+      { width: 2, height: 2, depth: 1, positionX: 0, positionY: -1.2, positionZ: 9 },
+      { width: 2, height: 2, depth: 1, positionX: 2, positionY: -1.2, positionZ: 9 },
+
+      { width: 2, height: 2, depth: 1, positionX: -4, positionY: -1.2, positionZ: 6 },
+      { width: 2, height: 2, depth: 1, positionX: 0, positionY: -1.2, positionZ: 6 },
+      { width: 2, height: 2, depth: 1, positionX: 2, positionY: -1.2, positionZ: 6 },
+      { width: 2, height: 2, depth: 1, positionX: 4, positionY: -1.2, positionZ: 6 },
+
+      { width: 2, height: 2, depth: 1, positionX: 4, positionY: -1.2, positionZ: 3 },
+      { width: 2, height: 2, depth: 1, positionX: 2, positionY: -1.2, positionZ: 3 },
+      { width: 2, height: 2, depth: 1, positionX: 0, positionY: -1.2, positionZ: 3 },
+      { width: 2, height: 2, depth: 1, positionX: -2, positionY: -1.2, positionZ: 3 },
+
+      { width: 2, height: 2, depth: 1, positionX: -4, positionY: -1.2, positionZ: 0 },
+      { width: 2, height: 2, depth: 1, positionX: 0, positionY: -1.2, positionZ: 0 },
+      { width: 2, height: 2, depth: 1, positionX: 4, positionY: -1.2, positionZ: 0 },
+
+      { width: 2, height: 2, depth: 1, positionX: -4, positionY: -1.2, positionZ: -3 },
+      { width: 2, height: 2, depth: 1, positionX: -2, positionY: -1.2, positionZ: -3 },
+      { width: 2, height: 2, depth: 1, positionX: 2, positionY: -1.2, positionZ: -3 },
+      { width: 2, height: 2, depth: 1, positionX: 4, positionY: -1.2, positionZ: -3 },
+
+      { width: 2, height: 2, depth: 1, positionX: -4, positionY: -1.2, positionZ: -6 },
+      { width: 2, height: 2, depth: 1, positionX: -2, positionY: -1.2, positionZ: -6 },
+      { width: 2, height: 2, depth: 1, positionX: 0, positionY: -1.2, positionZ: -6 },
+      { width: 2, height: 2, depth: 1, positionX: 4, positionY: -1.2, positionZ: -6 },
+
+      { width: 2, height: 2, depth: 1, positionX: -4, positionY: -1.2, positionZ: -9 },
+      { width: 2, height: 2, depth: 1, positionX: -2, positionY: -1.2, positionZ: -9 },
+      { width: 2, height: 2, depth: 1, positionX: 2, positionY: -1.2, positionZ: -9 },
+      { width: 2, height: 2, depth: 1, positionX: 4, positionY: -1.2, positionZ: -9 },
+
+      //==============================================================================
+
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: 24 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: 22 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: 20 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: 18 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: 16 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: 14 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: 12 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: 10 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: 8 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: 6 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: 4 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: 2 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: 0 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: -2 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: -4 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: -6 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: -8 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: -10 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: -12 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: -14 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: -16 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: -18 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: -20 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: -22 },
+      { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: -24 },
+
+      // { width: 1, height: 3, depth: 50, positionX: 5.5, positionY: -1, positionZ: 0 },
+      // { width: 1, height: 3, depth: 50, positionX: -5, positionY: -1, positionZ: 0 },
+      // { width: 11.5, height: 3, depth: 1, positionX: 0.25, positionY: -1, positionZ: -25 },
+      // { width: 11.5, height: 3, depth: 1, positionX: 0.25, positionY: -1, positionZ: 25 }
     ]
 
     for (let i = 0; i < wallsData.length; i++) {
@@ -201,15 +302,21 @@
       keyState[event.code] = false
     })
 
-    // icon1.visibile = true
-    // icon2.visibile = true
-    // icon3.visibile = true
-    // icon4.visibile = true
-    // icon5.visibile = true
-
-
     // Set initial positions for resetting mesh1
     const initialPositionPlayer = new THREE.Vector3(player.position.x, player.position.y, player.position.z);
+
+    function dead() {
+      var lives = document.querySelectorAll(".life-icon:not([style*='display: none'])");
+      var remainingLives = lives.length;
+      var lifeN = document.getElementById(`life${remainingLives}`)
+      lifeN.style.display = "none";
+
+      setTimeout(() => {
+        if (remainingLives == 1) {
+          alert("Game Over :(")
+        }
+      }, 1000)
+    }
 
     function checkCollision() {
       // Check for collision between mesh1 and mesh2
@@ -219,12 +326,9 @@
         if (distance < 1.0) {
           // Collision detected, reset mesh1 to initial position
           player.position.copy(initialPositionPlayer);
+          dead();
         }
       })
-    }
-
-    function hideIcon() {
-      icon1.visible = false
     }
 
     // Update function to handle movement and collision
@@ -238,10 +342,6 @@
 
       checkCollision();
     }
-
-    // const icons = document.getElementById('icons')
-    // const textureLoader = new TextureLoader()
-    // const iconTexture = textureLoader.load(icons.src)
 
     function animate() {
       update()
