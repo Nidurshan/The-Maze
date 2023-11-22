@@ -1,178 +1,267 @@
-<style>
-  body {
-    margin: 0;
-  }
-</style>
+<!DOCTYPE html>
+<html lang="en">
 
-<script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Maze</title>
+</head>
 
-<script type="importmap">
-        {
-          "imports": {
-            "three": "https://unpkg.com/three@0.150.1/build/three.module.js",
-            "three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/"
+<body>
+
+  <div class="mainTitle">
+    THE MAZE
+  </div>
+
+  <div class="icons">
+    <img id="icon1" src="./icons8-heart-64-removebg-preview.png" alt="image">
+    <br>
+    <img id="icon2" src="./icons8-heart-64-removebg-preview.png" alt="image">
+    <br>
+    <img id="icon3" src="./icons8-heart-64-removebg-preview.png" alt="image">
+    <br>
+    <img id="icon4" src="./icons8-heart-64-removebg-preview.png" alt="image">
+    <br>
+    <img id="icon5" src="./icons8-heart-64-removebg-preview.png" alt="image">
+  </div>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Oswald&family=Raleway:wght@500&family=Roboto+Mono:ital,wght@0,700;1,400&family=Roboto:ital,wght@0,500;1,900&family=Tektur:wght@600&family=Vina+Sans&display=swap');
+
+    body {
+      margin: 0;
+    }
+
+    .mainTitle {
+      position: absolute;
+      z-index: 100;
+      font-family: 'Vina Sans', sans-serif;
+      font-size: 5rem;
+      display: flex;
+      padding: 20px;
+      padding-left: 40px;
+      letter-spacing: 0.05em;
+      /* background: linear-gradient(to right, #00aeff, #40ff00); */
+      background: purple;
+      -webkit-background-clip: text;
+      color: transparent;
+      font-weight: bolder;
+    }
+
+    .icons {
+      position: absolute;
+      z-index: 20;
+      padding: 40px;
+      padding-top: 200px;
+    }
+  </style>
+
+  <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+
+  <script type="importmap">
+          {
+            "imports": {
+              "three": "https://unpkg.com/three@0.150.1/build/three.module.js",
+              "three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/"
+            }
           }
-        }
-</script>
+  </script>
 
-<script type="module">
-  import * as THREE from 'three'
-  import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+  <script type="module">
+    import * as THREE from 'three'
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
-  const raycaster = new THREE.Raycaster()
-  const scene = new THREE.Scene()
-  scene.background = new THREE.Color(0x808080)
-  const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-  )
+    var icon1 = document.getElementById('icon1')
+    var icon2 = document.getElementById('icon2')
+    var icon3 = document.getElementById('icon3')
+    var icon4 = document.getElementById('icon4')
+    var icon5 = document.getElementById('icon5')
 
-  camera.position.set(0, 35, 15)
-  camera.rotation.set(-Math.PI / 2, 0, 0)
-
-  const renderer = new THREE.WebGLRenderer()
-  // renderer.shadowMap.enabled = true
-  renderer.setSize(window.innerWidth, window.innerHeight)
-  document.body.appendChild(renderer.domElement)
-
-  const controls = new OrbitControls(camera, renderer.domElement)
-
-  const player = new THREE.Mesh(
-    new THREE.SphereGeometry(0.5, 32, 32),
-    new THREE.MeshStandardMaterial({ color: 0xff0000 })
-  )
-  // player.castShadow = true
-  player.position.y = -1
-  player.position.z = 22
-  // player.material.color.set(0x0000ff);
-  scene.add(player)
-
-  const ground = new THREE.Mesh(
-    new THREE.BoxGeometry(10, 1, 50),
-    new THREE.MeshStandardMaterial({ color: 0xD3D3D3 })
-  )
-  // ground.receiveShadow = true
-  ground.position.y = -2
-  scene.add(ground)
-
-  const light = new THREE.DirectionalLight(0xffffff, 1)
-  light.position.y = 5
-  light.position.z = 5
-  // light.castShadow = true
-  scene.add(light)
-
-  const dLight = new THREE.DirectionalLight(0xffffff, 1)
-  dLight.position.y = 3
-  dLight.position.z = -3
-  // dLight.castShadow = true
-  scene.add(dLight)
-
-  const aLight = new THREE.AmbientLight(0x404040, 0.5)
-  scene.add(aLight)
-
-  const walls = [];
-
-  const wallsData = [
-    { width: 6, height: 1.5, depth: 1, positionX: -2, positionY: -1.2, positionZ: 18 },
-    { width: 2, height: 1.5, depth: 1, positionX: 4, positionY: -1.2, positionZ: 18 },
-    { width: 4, height: 1.5, depth: 1, positionX: 3, positionY: -1.2, positionZ: 15 },
-    { width: 4, height: 1.5, depth: 1, positionX: -3, positionY: -1.2, positionZ: 15 },
-    { width: 2, height: 1.5, depth: 1, positionX: 4, positionY: -1.2, positionZ: 12 },
-    { width: 2, height: 1.5, depth: 1, positionX: -4, positionY: -1.2, positionZ: 12 },
-    { width: 2, height: 1.5, depth: 1, positionX: 0, positionY: -1.2, positionZ: 12 },
-    { width: 8, height: 1.5, depth: 1, positionX: -1, positionY: -1.2, positionZ: 9 },
-    { width: 6, height: 1.5, depth: 1, positionX: 2, positionY: -1.2, positionZ: 6 },
-    { width: 2, height: 1.5, depth: 1, positionX: -4, positionY: -1.2, positionZ: 6 },
-    { width: 8, height: 1.5, depth: 1, positionX: 1, positionY: -1.2, positionZ: 3 },
-    { width: 2, height: 1.5, depth: 1, positionX: 4, positionY: -1.2, positionZ: 0 },
-    { width: 2, height: 1.5, depth: 1, positionX: -4, positionY: -1.2, positionZ: 0 },
-    { width: 2, height: 1.5, depth: 1, positionX: 0, positionY: -1.2, positionZ: 0 },
-    { width: 4, height: 1.5, depth: 1, positionX: 3, positionY: -1.2, positionZ: -3 },
-    { width: 4, height: 1.5, depth: 1, positionX: -3, positionY: -1.2, positionZ: -3 },
-    { width: 6, height: 1.5, depth: 1, positionX: -2, positionY: -1.2, positionZ: -6 },
-    { width: 2, height: 1.5, depth: 1, positionX: 4, positionY: -1.2, positionZ: -6 },
-    { width: 4, height: 1.5, depth: 1, positionX: 3, positionY: -1.2, positionZ: -9 },
-    { width: 4, height: 1.5, depth: 1, positionX: -3, positionY: -1.2, positionZ: -9 },
-    { width: 1, height: 3, depth: 50, positionX: 5.5, positionY: -1, positionZ: 0 },
-    { width: 1, height: 3, depth: 50, positionX: -5, positionY: -1, positionZ: 0 }
-  ]
-
-  for (let i = 0; i < wallsData.length; i++) {
-    var wallObj = wallsData[i];
-    const wall = new THREE.Mesh(
-      new THREE.BoxGeometry(wallObj.width, wallObj.height, wallObj.depth),
-      new THREE.MeshStandardMaterial({ color: 0xD2691E })
+    const raycaster = new THREE.Raycaster()
+    const scene = new THREE.Scene()
+    scene.background = new THREE.Color(0x808080)
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
     )
-    wall.position.x = wallObj.positionX
-    wall.position.y = wallObj.positionY
-    wall.position.z = wallObj.positionZ
-    // wall.castShadow = true
-    walls.push(wall);
-  }
 
-  // Add walls to the scene by looping
-  walls.map(wall => scene.add(wall));
+    camera.position.set(0, 35, 15)
+    camera.rotation.set(-Math.PI / 2, 0, 0)
 
-  const homeBox = new THREE.Mesh(
-    new THREE.BoxGeometry(4, 4, 4),
-    new THREE.MeshStandardMaterial({ color: 0x0000ff })
-  )
+    const renderer = new THREE.WebGLRenderer()
+    // renderer.shadowMap.enabled = true
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    document.body.appendChild(renderer.domElement)
 
-  const coneGeometry = new THREE.ConeGeometry(2.9, 2.8, 4)
-  const coneMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 })
-  const homeCone = new THREE.Mesh(coneGeometry, coneMaterial)
-  homeCone.position.y = 3.4
-  homeCone.rotation.y = 0.8
+    const controls = new OrbitControls(camera, renderer.domElement)
 
-  const house = new THREE.Group()
-  house.add(homeBox)
-  house.add(homeCone)
-  house.position.z = -18
-  scene.add(house)
+    // Add text to scene
+    // const titleGeometry = new THREE.TextGeometry('The Maze', {
+    //   font: new THREE.Font(),
+    //   size: 0.5,
+    //   height: 0.1,
+    //   curveSegments: 12,
+    //   bevelEnabled: false,
+    // })
+    // const titleMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 })
+    // const title = new THREE.Mesh(titleGeometry, titleMaterial)
+    // scene.add(title)
 
-  const keyState = {}
+    const player = new THREE.Mesh(
+      new THREE.SphereGeometry(0.5, 32, 32),
+      new THREE.MeshStandardMaterial({ color: 0xff0000 })
+    )
+    // player.castShadow = true
+    player.position.y = -1
+    player.position.z = 22
+    // player.material.color.set(0x0000ff);
+    scene.add(player)
 
-  window.addEventListener('keydown', (event) => {
-    keyState[event.code] = true
-  })
-  window.addEventListener('keyup', (event) => {
-    keyState[event.code] = false
-  })
+    const ground = new THREE.Mesh(
+      new THREE.BoxGeometry(10, 1, 50),
+      new THREE.MeshStandardMaterial({ color: 0xD3D3D3 })
+    )
+    // ground.receiveShadow = true
+    ground.position.y = -2
+    scene.add(ground)
 
+    const light = new THREE.DirectionalLight(0xffffff, 1)
+    light.position.y = 5
+    light.position.z = 5
+    // light.castShadow = true
+    scene.add(light)
 
-  // Set initial positions for resetting mesh1
-  const initialPositionPlayer = new THREE.Vector3(player.position.x, player.position.y, player.position.z);
+    const dLight = new THREE.DirectionalLight(0xffffff, 1)
+    dLight.position.y = 3
+    dLight.position.z = -3
+    // dLight.castShadow = true
+    scene.add(dLight)
 
-  function checkCollision() {
-    // Check for collision between mesh1 and mesh2
-    walls.map(wall => {
-      const distance = player.position.distanceTo(wall.position);
+    const aLight = new THREE.AmbientLight(0x404040, 0.5)
+    scene.add(aLight)
 
-      if (distance < 1) {
-        // Collision detected, reset mesh1 to initial position
-        player.position.copy(initialPositionPlayer);
-      }
+    const walls = [];
+
+    const wallsData = [
+      { width: 6, height: 1.5, depth: 1, positionX: -2, positionY: -1.2, positionZ: 18 },
+      { width: 2, height: 1.5, depth: 1, positionX: 4, positionY: -1.2, positionZ: 18 },
+      { width: 4, height: 1.5, depth: 1, positionX: 3, positionY: -1.2, positionZ: 15 },
+      { width: 4, height: 1.5, depth: 1, positionX: -3, positionY: -1.2, positionZ: 15 },
+      { width: 2, height: 1.5, depth: 1, positionX: 4, positionY: -1.2, positionZ: 12 },
+      { width: 2, height: 1.5, depth: 1, positionX: -4, positionY: -1.2, positionZ: 12 },
+      { width: 2, height: 1.5, depth: 1, positionX: 0, positionY: -1.2, positionZ: 12 },
+      { width: 8, height: 1.5, depth: 1, positionX: -1, positionY: -1.2, positionZ: 9 },
+      { width: 6, height: 1.5, depth: 1, positionX: 2, positionY: -1.2, positionZ: 6 },
+      { width: 2, height: 1.5, depth: 1, positionX: -4, positionY: -1.2, positionZ: 6 },
+      { width: 8, height: 1.5, depth: 1, positionX: 1, positionY: -1.2, positionZ: 3 },
+      { width: 2, height: 1.5, depth: 1, positionX: 4, positionY: -1.2, positionZ: 0 },
+      { width: 2, height: 1.5, depth: 1, positionX: -4, positionY: -1.2, positionZ: 0 },
+      { width: 2, height: 1.5, depth: 1, positionX: 0, positionY: -1.2, positionZ: 0 },
+      { width: 4, height: 1.5, depth: 1, positionX: 3, positionY: -1.2, positionZ: -3 },
+      { width: 4, height: 1.5, depth: 1, positionX: -3, positionY: -1.2, positionZ: -3 },
+      { width: 6, height: 1.5, depth: 1, positionX: -2, positionY: -1.2, positionZ: -6 },
+      { width: 2, height: 1.5, depth: 1, positionX: 4, positionY: -1.2, positionZ: -6 },
+      { width: 4, height: 1.5, depth: 1, positionX: 3, positionY: -1.2, positionZ: -9 },
+      { width: 4, height: 1.5, depth: 1, positionX: -3, positionY: -1.2, positionZ: -9 },
+      { width: 1, height: 3, depth: 50, positionX: 5.5, positionY: -1, positionZ: 0 },
+      { width: 1, height: 3, depth: 50, positionX: -5, positionY: -1, positionZ: 0 },
+      { width: 11.5, height: 3, depth: 1, positionX: 0.25, positionY: -1, positionZ: -25 },
+      { width: 11.5, height: 3, depth: 1, positionX: 0.25, positionY: -1, positionZ: 25 }
+    ]
+
+    for (let i = 0; i < wallsData.length; i++) {
+      var wallObj = wallsData[i];
+      const wall = new THREE.Mesh(
+        new THREE.BoxGeometry(wallObj.width, wallObj.height, wallObj.depth),
+        new THREE.MeshStandardMaterial({ color: 0xD2691E })
+      )
+      wall.position.x = wallObj.positionX
+      wall.position.y = wallObj.positionY
+      wall.position.z = wallObj.positionZ
+      // wall.castShadow = true
+      walls.push(wall);
+    }
+
+    // Add walls to the scene by looping
+    walls.map(wall => scene.add(wall));
+
+    const homeBox = new THREE.Mesh(
+      new THREE.BoxGeometry(4, 4, 4),
+      new THREE.MeshStandardMaterial({ color: 0x0000ff })
+    )
+
+    const coneGeometry = new THREE.ConeGeometry(2.9, 2.8, 4)
+    const coneMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 })
+    const homeCone = new THREE.Mesh(coneGeometry, coneMaterial)
+    homeCone.position.y = 3.4
+    homeCone.rotation.y = 0.8
+
+    const house = new THREE.Group()
+    house.add(homeBox)
+    house.add(homeCone)
+    house.position.z = -18
+    scene.add(house)
+
+    const keyState = {}
+
+    window.addEventListener('keydown', (event) => {
+      keyState[event.code] = true
     })
-  }
+    window.addEventListener('keyup', (event) => {
+      keyState[event.code] = false
+    })
 
-  // Update function to handle movement and collision
-  function update() {
+    icon1.visibile = true
+    icon2.visibile = true
+    icon3.visibile = true
+    icon4.visibile = true
+    icon5.visibile = true
 
-    if (keyState['ArrowUp']) player.position.z -= 0.1
-    if (keyState['ArrowDown']) player.position.z += 0.1
-    if (keyState['ArrowLeft']) player.position.x -= 0.1
-    if (keyState['ArrowRight']) player.position.x += 0.1
-    if (keyState['Space']) player.position.y += 0.5
 
-    checkCollision();
-  }
+    // Set initial positions for resetting mesh1
+    const initialPositionPlayer = new THREE.Vector3(player.position.x, player.position.y, player.position.z);
 
-  function animate() {
-    update();
-    renderer.render(scene, camera)
-    requestAnimationFrame(animate)
-  }
-  animate()
-</script>
+    function checkCollision() {
+      // Check for collision between mesh1 and mesh2
+      walls.map(wall => {
+        const distance = player.position.distanceTo(wall.position);
+
+        if (distance < 1.0) {
+          // Collision detected, reset mesh1 to initial position
+          player.position.copy(initialPositionPlayer);
+        }
+      })
+    }
+
+    function hideIcon() {
+      icon1.visible = false
+    }
+
+    // Update function to handle movement and collision
+    function update() {
+
+      if (keyState['ArrowUp']) player.position.z -= 0.1
+      if (keyState['ArrowDown']) player.position.z += 0.1
+      if (keyState['ArrowLeft']) player.position.x -= 0.1
+      if (keyState['ArrowRight']) player.position.x += 0.1
+      // if (keyState['Space']) player.position.y += 0.5
+
+      checkCollision();
+    }
+
+    // const icons = document.getElementById('icons')
+    // const textureLoader = new TextureLoader()
+    // const iconTexture = textureLoader.load(icons.src)
+
+    function animate() {
+      update()
+      renderer.render(scene, camera)
+      requestAnimationFrame(animate)
+    }
+    animate()
+  </script>
+</body>
+
+</html>
