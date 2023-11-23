@@ -40,8 +40,21 @@
     </div>
   </div>
 
-  <div id="timer">
-    <span id="hour">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
+  <div class="timeout-container">
+    <div class="timeout" id="timeOut">
+      <span class="time-up-title">TIME UP!</span>
+      <img src="./Images and Icons/6cab181e30143b581fd6570c99af98cb-removebg-preview.png" alt="icon" width="100"
+        height="100">
+      <button class="button" id="restartBtn2Timeout">RESTART</button>
+    </div>
+  </div>
+
+  <div class="timer-container">
+    <div class="timer-box">
+      <div class="timer">
+        <span>Seconds:</span><span> </span><span id="seconds">0</span>
+      </div>
+    </div>
   </div>
 
   <style>
@@ -158,7 +171,58 @@
       flex-direction: column;
     }
 
+    .timer-container {
+      display: flex;
+      justify-content: flex-end;
+    }
 
+    .timer-box {
+      position: absolute;
+      z-index: 250;
+      width: 250px;
+      height: 150px;
+      background: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 40px;
+      color: white;
+    }
+
+    .timeout-container {
+      background: transparent;
+      /* display: none; */
+      width: 100%;
+      height: 100vh;
+      position: fixed;
+      z-index: 400;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .timeout {
+      z-index: 50;
+      border: 10px solid black;
+      background: whitesmoke;
+      border-radius: 30px;
+      /* display: none; */
+      flex-direction: column;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 40px;
+      font-weight: bolder;
+      width: auto;
+      height: auto;
+      gap: 20px;
+    }
+
+    .timeout-container span{
+      padding: 0;
+      font-size: 4rem;
+    }
   </style>
 
   <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
@@ -184,6 +248,29 @@
     var life3 = document.getElementById('life3')
     var life4 = document.getElementById('life4')
     var life5 = document.getElementById('life5')
+
+    var setMinutes = document.getElementById('minutes')
+    var setSeconds = document.getElementById('seconds')
+    var startGameBtn = document.getElementById('start')
+
+    var timeOutPopup = document.getElementById("timeOut")
+    var timeoutRestartBtn = document.getElementById("restartBtn2Timeout")
+
+    setSeconds = 0
+    function secondIncrement() {
+      const interval = setInterval(function() {
+        setSeconds++
+        seconds.innerHTML = setSeconds
+
+        if(setSeconds === 60){
+          clearInterval(interval)
+          timeOutPopup.style.display = "flex"
+          location.reload()
+        }
+      }, 1000)
+
+    }
+    secondIncrement()
 
     const raycaster = new THREE.Raycaster()
     const scene = new THREE.Scene()
