@@ -9,6 +9,13 @@
 
 <body>
 
+  <!-- <div class="start-container">
+    <div class="start">
+      <span>WELCOME TO THE MAZE :)</span>
+      <button class="startBtn" id="start-btn">Start</button>
+    </div>
+  </div> -->
+
   <div class="mainTitle">
     THE MAZE
   </div>
@@ -25,24 +32,62 @@
     <img id="life5" class="life-icon" src="./Images and Icons/icons8-heart-64-removebg-preview.png" alt="image">
   </div>
 
-  <div class="game-over" id="gameOver">
-    GAME OVER!
-    <img src="./Images and Icons/icons8-sad-face-96.png" alt="icon">
+  <div class="popup-container">
+    <div class="game-over" id="gameOver">
+      <span class="title">GAME OVER!</span>
+      <img src="./Images and Icons/icons8-sad-face-96.png" alt="icon">
+      <button class="button" id="restartBtn">RESTART</button>
+    </div>
   </div>
 
-  <button class="button" id="retry-btn">RESTART</button>
+  <div id="timer">
+    <span id="hour">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
+  </div>
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Oswald&family=Raleway:wght@500&family=Roboto+Mono:ital,wght@0,700;1,400&family=Roboto:ital,wght@0,500;1,900&family=Tektur:wght@600&family=Vina+Sans&display=swap');
 
-    body {
+    * {
+      font-family: 'League Spartan', sans-serif !important;
       margin: 0;
     }
+
+    /* .start-container{
+      position: absolute;
+      z-index: 200;
+      background: rgb(179, 179, 179);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100vh;
+      position: fixed;
+    }
+
+    .start-container .start span{
+      font-size: 50px;
+    }
+
+    .start-container .startBtn{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      background-color: aqua;
+      border-radius: 20px;
+      padding: 10px 25px 10px 25px;
+      border: none;
+      font-size: 20px;
+    }
+
+    .start-container .startBtn:hover{
+      background: black;
+      color: white;
+    } */
 
     .mainTitle {
       position: absolute;
       z-index: 100;
-      font-family: 'Arial', sans-serif;
       font-size: 4rem;
       display: flex;
       padding: 20px;
@@ -62,25 +107,27 @@
     }
 
     .game-over {
-      position: absolute;
       z-index: 50;
-      font-family: 'League Spartan', sans-serif;
-      font-size: 8rem;
-      border: 5px solid black;
+      border: 10px solid black;
       background: whitesmoke;
       border-radius: 30px;
-      display: flex;
+      display: none;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 40px 40px 100px 40px;
-      margin-left: 350px;
-      margin-top: 250px;
+      padding: 40px 40px;
       font-weight: bolder;
+      width: auto;
+      height: auto;
+      gap: 20px;
+    }
+
+    .game-over .title {
+      padding: 0;
+      font-size: 4rem;
     }
 
     .button {
-      position: absolute;
       z-index: 150;
       font-family: 'League Spartan', sans-serif;
       font-size: 15px;
@@ -89,8 +136,6 @@
       color: rgb(0, 0, 0);
       border-radius: 20px;
       cursor: pointer;
-      margin-left: 760px;
-      margin-top: 550px;
       padding: 10px 15px 10px 15px;
       border: none;
     }
@@ -99,6 +144,21 @@
       color: white;
       background: black;
     }
+
+    .popup-container {
+      background: transparent;
+      display: none;
+      width: 100%;
+      height: 100vh;
+      position: fixed;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+
   </style>
 
   <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
@@ -115,6 +175,9 @@
   <script type="module">
     import * as THREE from 'three'
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+
+    var gameOverPopup = document.getElementById("gameOver")
+    var restartBtn = document.getElementById("restartBtn")
 
     var life1 = document.getElementById('life1')
     var life2 = document.getElementById('life2')
@@ -308,9 +371,18 @@
 
       setTimeout(() => {
         if (remainingLives == 1) {
-          alert("Game Over :(")
+          gameOverPopup.style.display = "flex"
         }
       }, 1000)
+    }
+
+    restartBtn.addEventListener('click', () => {
+      restart();
+    })
+
+    function restart() {
+      gameOverPopup.style.display = "none";
+      location.reload();
     }
 
     function checkCollision() {
@@ -335,7 +407,7 @@
       if (keyState['ArrowRight']) player.position.x += 0.1
       // if (keyState['Space']) player.position.y += 0.5
 
-      checkCollision();
+      checkCollision()
     }
 
     function animate() {
