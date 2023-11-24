@@ -40,14 +40,14 @@
     </div>
   </div>
 
-  <div class="timeout-container">
+  <!-- <div class="timeout-container">
     <div class="timeout" id="timeOut">
       <span class="time-up-title">TIME UP!</span>
       <img src="./Images and Icons/6cab181e30143b581fd6570c99af98cb-removebg-preview.png" alt="icon" width="100"
         height="100">
       <button class="button" id="restartBtn2Timeout">RESTART</button>
     </div>
-  </div>
+  </div> -->
 
   <div class="timer-container">
     <div class="timer-box">
@@ -204,7 +204,7 @@
       padding: 10px;
     }
 
-    .timeout-container {
+    /* .timeout-container {
       display: none;
       background: transparent;
       width: 100%;
@@ -212,12 +212,12 @@
       position: fixed;
       z-index: 400;
       flex-direction: column;
-      /* display: flex; */
+      display: flex;
       justify-content: center;
       align-items: center;
-    }
+    } */
 
-    .timeout {
+    /* .timeout {
       display: none;
       z-index: 50;
       border: 10px solid black;
@@ -229,7 +229,7 @@
       width: auto;
       height: auto;
       gap: 20px;
-      /* display: flex; */
+      display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -238,7 +238,7 @@
     .timeout-container span {
       padding: 0;
       font-size: 4rem;
-    }
+    } */
   </style>
 
   <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
@@ -278,12 +278,24 @@
         setSeconds++
         seconds.innerHTML = setSeconds
 
+        if(setSeconds === 12){
+          console.log("You got 100 points!")
+        } else if(setSeconds === 15){
+          console.log("You got 75 points!")
+        } else if(setSeconds === 20){
+          console.log("You got 50 points!")
+        } else if(setSeconds === 25){
+          console.log("You got 25 points!")
+        } else if(setSeconds > 25) {
+          console.log("You didn't get any points!")
+        }
+
         if (setSeconds === 60) {
           clearInterval(interval)
-          timeOutPopup.style.display = "flex"
-          location.reload()
+          // timeOutPopup.style.display = "flex"
+          // location.reload()
         }
-      }, 1000)
+      }, 100)
 
     }
     secondIncrement()
@@ -503,6 +515,18 @@
       })
     }
 
+    // const initialPositionHouse = new THREE.Vector3(homeBox.position.x, homeBox.position.y, homeBox.position.z);
+
+    // function checkHomeCollision() {
+    //   homeBox.map(homeBox => {
+    //   const distance2 = player.position.distanceTo(homeBox.position)
+
+    //   if (distance2 < 1.0) {
+    //     homeBox.material.color = new THREE.Color("#00ff00");
+    //   }
+    // })
+    // }
+
     // Update function to handle movement and collision
     function update() {
 
@@ -518,9 +542,14 @@
       update()
       renderer.render(scene, camera)
       requestAnimationFrame(animate)
+
+      if(homeBox.position.distanceTo(player.position) < 1){
+        homeBox.material.color.set(0x00ff00)
+      } else{
+        homeBox.material.color.set(0x000000)
+      }
     }
     animate()
   </script>
 </body>
-
 </html>
