@@ -542,12 +542,6 @@
       update()
       renderer.render(scene, camera)
       requestAnimationFrame(animate)
-
-      if(homeBox.position.distanceTo(player.position) < 1){
-        homeBox.material.color.set(0x00ff00)
-      } else{
-        homeBox.material.color.set(0x000000)
-      }
     }
     animate()
   </script>
