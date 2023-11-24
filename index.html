@@ -53,6 +53,9 @@
     <div class="timer-box">
       <div class="timer">
         <span>Seconds:</span><span> </span><span id="seconds">0</span>
+        <div class="text-div">
+          <span>TRY TO REACH HOME WITHIN 60 SECONDS</span>
+        </div>
       </div>
     </div>
   </div>
@@ -187,6 +190,19 @@
       align-items: center;
       font-size: 40px;
       color: white;
+    }
+
+    .timer-box .text-div{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: black;
+    }
+    
+    .timer-box .text-div span{
+      font-size: 11px;
+      color: white;
+      padding: 10px;
     }
 
     .timeout-container {
