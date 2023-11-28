@@ -376,33 +376,23 @@
 
     // Create a point box geometry
 
-    // var point = new THREE.Mesh(
-    //   new THREE.BoxGeometry(0.8, 0.8, 0.8),
-    //   new THREE.MeshStandardMaterial({ color: 0x00ff00 })
-    // )
-
-    // point.position.x = -4
-    // point.position.z = 16.5
-
-    // scene.add(point)
-
     const points = []
 
     const pointArray = [
-      { width: 0.7, height: 0.7, depth: 0.7, positionX: -4, positionY: 0, positionZ: 16.5 },
-      { width: 0.7, height: 0.7, depth: 0.7, positionX: 0, positionY: 0, positionZ: 15 },
-      { width: 0.7, height: 0.7, depth: 0.7, positionX: 4, positionY: 0, positionZ: 13.5 },
-      { width: 0.7, height: 0.7, depth: 0.7, positionX: -4, positionY: 0, positionZ: 13.5 },
-      { width: 0.7, height: 0.7, depth: 0.7, positionX: -4, positionY: 0, positionZ: 10.5 },
-      { width: 0.7, height: 0.7, depth: 0.7, positionX: 4, positionY: 0, positionZ: 9 },
-      { width: 0.7, height: 0.7, depth: 0.7, positionX: 0, positionY: 0, positionZ: 5 },
-      { width: 0.7, height: 0.7, depth: 0.7, positionX: -4, positionY: 0, positionZ: 3 },
-      { width: 0.7, height: 0.7, depth: 0.7, positionX: 4, positionY: 0, positionZ: 1.5 },
-      { width: 0.7, height: 0.7, depth: 0.7, positionX: -4, positionY: 0, positionZ: -1.5 },
-      { width: 0.7, height: 0.7, depth: 0.7, positionX: 0, positionY: 0, positionZ: -2.5 },
-      { width: 0.7, height: 0.7, depth: 0.7, positionX: -4, positionY: 0, positionZ: -4 },
-      { width: 0.7, height: 0.7, depth: 0.7, positionX: 4, positionY: 0, positionZ: -7 },
-      { width: 0.7, height: 0.7, depth: 0.7, positionX: 0, positionY: 0, positionZ: -8.5 }
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: -4, positionY: -0.5, positionZ: 16.5 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: 0, positionY: -0.5, positionZ: 15 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: 4, positionY: -0.5, positionZ: 13.5 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: -4, positionY: -0.5, positionZ: 13.5 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: -4, positionY: -0.5, positionZ: 10.5 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: 4, positionY: -0.5, positionZ: 9 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: 0, positionY: -0.5, positionZ: 5 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: -4, positionY: -0.5, positionZ: 3 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: 4, positionY: -0.5, positionZ: 1.5 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: -4, positionY: -0.5, positionZ: -1.5 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: 0, positionY: -0.5, positionZ: -2.5 },
+      // { width: 0.7, height: 0.7, depth: 0.7, positionX: -4, positionY: -0.5, positionZ: -4 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: 4, positionY: -0.5, positionZ: -7 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: 0, positionY: -0.5, positionZ: -8.5 }
     ]
 
     for (let i = 0; i < pointArray.length; i++) {
