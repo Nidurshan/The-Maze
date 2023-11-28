@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Current Time and Date</title>
+  </head>
+  <body>
+    <script>
+      // Function to get the current date and time
+      function getCurrentDateTime() {
+        const currentDate = new Date();
+        return currentDate;
+      }
+
+      // Function to format the date and time
+      function formatDateTime(dateTime) {
+        const options = {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric',
+          timeZoneName: 'short',
+        };
+
+        return dateTime.toLocaleDateString(undefined, options);
+      }
+
+      // Display current date and time
+      function displayCurrentDateTime() {
+        const currentDateTime = getCurrentDateTime();
+        const formattedDateTime = formatDateTime(currentDateTime);
+
+        // Display the formatted date and time in an HTML element
+        document.body.innerHTML = `<h1>${formattedDateTime}</h1>`;
+      }
+
+      // Update the time every second
+      setInterval(displayCurrentDateTime, 1000);
+
+      // Initial display
+      displayCurrentDateTime();
+    </script>
+  </body>
+</html>

@@ -60,6 +60,10 @@
     </div>
   </div>
 
+  <!-- <div class="score-div">
+    <div id="score" class="scoreCss">Score: 0</div>
+  </div> -->
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Oswald&family=Raleway:wght@500&family=Roboto+Mono:ital,wght@0,700;1,400&family=Roboto:ital,wght@0,500;1,900&family=Tektur:wght@600&family=Vina+Sans&display=swap');
 
@@ -239,6 +243,15 @@
       padding: 0;
       font-size: 4rem;
     } */
+
+    /* .score-div {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: white;
+      font-size: 24px;
+      font-family: Arial, sans-serif;
+    } */
   </style>
 
   <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
@@ -255,52 +268,6 @@
   <script type="module">
     import * as THREE from 'three'
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-
-    var gameOverPopup = document.getElementById("gameOver")
-    var restartBtn = document.getElementById("restartBtn")
-
-    var life1 = document.getElementById('life1')
-    var life2 = document.getElementById('life2')
-    var life3 = document.getElementById('life3')
-    var life4 = document.getElementById('life4')
-    var life5 = document.getElementById('life5')
-
-    var setMinutes = document.getElementById('minutes')
-    var setSeconds = document.getElementById('seconds')
-    var startGameBtn = document.getElementById('start')
-
-    var timeOutPopup = document.getElementById("timeOut")
-    var timeoutRestartBtn = document.getElementById("restartBtn2Timeout")
-
-    setSeconds = 0
-    function secondIncrement() {
-      const interval = setInterval(function () {
-        setSeconds++
-        seconds.innerHTML = setSeconds
-
-        if(setSeconds === 12){
-          console.log("You got 100 points!")
-        } else if(setSeconds === 15){
-          console.log("You got 75 points!")
-        } else if(setSeconds === 20){
-          console.log("You got 50 points!")
-        } else if(setSeconds === 25){
-          console.log("You got 25 points!")
-        } else if(setSeconds > 25) {
-          console.log("You didn't get any points!")
-        }
-
-        if (setSeconds === 60) {
-          clearInterval(interval)
-          // timeOutPopup.style.display = "flex"
-          // location.reload()
-        }
-      }, 100)
-
-    }
-    secondIncrement()
-
-
 
     const raycaster = new THREE.Raycaster()
     const scene = new THREE.Scene()
@@ -321,6 +288,58 @@
     document.body.appendChild(renderer.domElement)
 
     const controls = new OrbitControls(camera, renderer.domElement)
+
+    var gameOverPopup = document.getElementById("gameOver")
+    var restartBtn = document.getElementById("restartBtn")
+
+    var life1 = document.getElementById('life1')
+    var life2 = document.getElementById('life2')
+    var life3 = document.getElementById('life3')
+    var life4 = document.getElementById('life4')
+    var life5 = document.getElementById('life5')
+
+    var setMinutes = document.getElementById('minutes')
+    var setSeconds = document.getElementById('seconds')
+    var startGameBtn = document.getElementById('start')
+
+    var timeOutPopup = document.getElementById("timeOut")
+    var timeoutRestartBtn = document.getElementById("restartBtn2Timeout")
+
+    // var gameScore = document.getElementById("score")
+
+    // function getScore() {
+    //   gameScore = 0
+    //   gameScore.innerHTML = 'Score: ' + ;
+    // }
+
+    setSeconds = 0
+    function secondIncrement() {
+      const interval = setInterval(function () {
+        setSeconds++
+        seconds.innerHTML = setSeconds
+
+        if (setSeconds === 12) {
+          console.log("You got 100 points!")
+        } else if (setSeconds === 15) {
+          console.log("You got 75 points!")
+        } else if (setSeconds === 20) {
+          console.log("You got 50 points!")
+        } else if (setSeconds === 25) {
+          console.log("You got 25 points!")
+        } else if (setSeconds > 25) {
+          console.log("You didn't get any points!")
+        }
+
+        if (setSeconds === 60) {
+          // clearInterval(interval)
+          // timeOutPopup.style.display = "flex"
+          // location.reload()
+        }
+      }, 1000)
+
+    }
+    secondIncrement()
+
 
     const player = new THREE.Mesh(
       new THREE.SphereGeometry(0.5, 32, 32),
@@ -355,7 +374,51 @@
     const aLight = new THREE.AmbientLight(0x404040, 0.5)
     scene.add(aLight)
 
-    const walls = [];
+    // Create a point box geometry
+
+    // var point = new THREE.Mesh(
+    //   new THREE.BoxGeometry(0.8, 0.8, 0.8),
+    //   new THREE.MeshStandardMaterial({ color: 0x00ff00 })
+    // )
+
+    // point.position.x = -4
+    // point.position.z = 16.5
+
+    // scene.add(point)
+
+    const points = []
+
+    const pointArray = [
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: -4, positionY: 0, positionZ: 16.5 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: 0, positionY: 0, positionZ: 15 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: 4, positionY: 0, positionZ: 13.5 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: -4, positionY: 0, positionZ: 13.5 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: -4, positionY: 0, positionZ: 10.5 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: 4, positionY: 0, positionZ: 9 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: 0, positionY: 0, positionZ: 5 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: -4, positionY: 0, positionZ: 3 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: 4, positionY: 0, positionZ: 1.5 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: -4, positionY: 0, positionZ: -1.5 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: 0, positionY: 0, positionZ: -2.5 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: -4, positionY: 0, positionZ: -4 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: 4, positionY: 0, positionZ: -7 },
+      { width: 0.7, height: 0.7, depth: 0.7, positionX: 0, positionY: 0, positionZ: -8.5 }
+    ]
+
+    for (let i = 0; i < pointArray.length; i++) {
+      var pointBox = pointArray[i]
+      const point = new THREE.Mesh(
+        new THREE.BoxGeometry(pointBox.width, pointBox.height, pointBox.depth),
+        new THREE.MeshStandardMaterial({ color: 0x00ff00 })
+      )
+      point.position.x = pointBox.positionX
+      point.position.y = pointBox.positionY
+      point.position.z = pointBox.positionZ
+      points.push(point)
+    }
+    points.map(point => scene.add(point));
+
+    const walls = []
 
     const wallsData = [
       { width: 2, height: 2, depth: 1, positionX: -4, positionY: -1.2, positionZ: 18 },
@@ -435,8 +498,8 @@
       { width: 2, height: 2.3, depth: 2, positionX: 6, positionY: -1.35, positionZ: -24 }
     ]
 
-    for (let i = 0; i < wallsData.length; i++) {
-      var wallObj = wallsData[i];
+    for (let j = 0; j < wallsData.length; j++) {
+      var wallObj = wallsData[j];
       const wall = new THREE.Mesh(
         new THREE.BoxGeometry(wallObj.width, wallObj.height, wallObj.depth),
         new THREE.MeshStandardMaterial({ color: 0xD2691E })
@@ -511,6 +574,7 @@
           // Collision detected, reset player to initial position
           player.position.copy(initialPositionPlayer);
           dead();
+          // getScore();
         }
       })
     }
@@ -542,6 +606,8 @@
       update()
       renderer.render(scene, camera)
       requestAnimationFrame(animate)
+      points.rotation.x += 0.1
+      points.rotation.y += 0.1
     }
     animate()
   </script>
