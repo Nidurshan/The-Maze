@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Tester in three js</title>
+</head>
+
+<body>
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+
+    <script type="importmap">
+            {
+              "imports": {
+                "three": "https://unpkg.com/three@0.150.1/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/"
+              }
+            }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three'
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+
+        const raycaster = new THREE.Raycaster()
+        const scene = new THREE.Scene()
+        scene.background = new THREE.Color(0x808080)
+        const camera = new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
+        )
+
+        const audioListener = new THREE.AudioListener()
+        camera.add(audioListener)
+
+        const audioLoader = new THREE.AudioLoader();
+
+        const audio = new THREE.PositionalAudio(audioListener)
+        audioLoader.load('This PC/Pictures/Video Editing/Audio/Sinhala Songs/Ape Punchi Ithihasaya.mp3', function (buffer) {
+            audio.setBuffer(buffer)
+            audio.setLoop(true)
+            audio.setVolume(0.5)
+            scene.add(audio)
+            audio.play()
+        })
+
+        audio.position.set(5, 2, 2);
+    </script>
+</body>
+</html>
